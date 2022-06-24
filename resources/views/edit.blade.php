@@ -17,7 +17,7 @@
                         <h2 class="mt-0 mb-0" style="color: rgb(0, 0, 0); font-size: 22px;"><b>Silahkan Edit Data Berikut</b></h2>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('pegawai.update', $pegawai->id) }}">
+                        <form method="POST" action="{{ route('pegawai.update', $pegawai->id) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
@@ -67,6 +67,22 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Foto : </label>
+                                <input type="hidden" name="oldImage" value="{{ $pegawai->foto }}">
+                                @if($pegawai->foto)
+                                        <img src="{{ asset('storage/'.$pegawai->foto)}}" class="img-preview img-fluid mb-3 col-sm-5 d-block">
+                                @else 
+                                    <img class="img-preview img-fluid mb-3 col-sm-5">
+                                @endif
+                                <input type="file" name="foto" accept="image/*" class="form-control @error('foto') is-invalid @enderror" onchange="previewImage()" id="foto" value="{{ old('foto') }}">
+                                @error('foto')
+                                    <div class="col-sm-2"></div> {{-- dummy --}}
+                                    <div class="text-danger col-sm-10">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
                                 <button type="submit" name="aksi" value="tambah" class="btn btn-success me-2">
                                     Submit Changes
                                 </button>
@@ -81,5 +97,20 @@
             </div>
         </div>
     </div>
+    <script>
+        function previewImage(){
+            const image = document.querySelector('#foto');
+            const imgPreview = document.querySelector('.img-preview');
+
+            imgPreview.style.display ='block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(ofREvent){
+                imgPreview.src = ofREvent.target.result;
+            }
+        }
+    </script>
 </body>
 </html>

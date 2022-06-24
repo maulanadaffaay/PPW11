@@ -64,6 +64,7 @@
                             <tr>
                                 <th>Nomor</th>
                                 <th>Nama</th>
+                                <th>Foto</th>
                                 <th>No HP</th>
                                 <th>Alamat</th>
                                 <th>Gender</th>
@@ -81,6 +82,9 @@
                                     </td>
                                     <td>
                                         {{ $pegawai->Nama }}
+                                    </td>
+                                    <td>
+                                        <img src="{{ asset('storage/'. $pegawai->foto) }}" style="width:50px;" alt="">
                                     </td>
                                     <td>
                                         {{ $pegawai->No_HP }}

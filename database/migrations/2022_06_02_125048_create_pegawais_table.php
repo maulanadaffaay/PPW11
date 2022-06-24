@@ -19,6 +19,7 @@ class CreatePegawaisTable extends Migration
             $table->string('No_HP');
             $table->string('Alamat');
             $table->string('Gender');
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

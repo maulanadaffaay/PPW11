@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Pegawai;
+
 
 class PegawaiController extends Controller
 {
@@ -41,9 +43,17 @@ class PegawaiController extends Controller
             'Nama' => 'required',
             'No_HP' => 'required',
             'Alamat' => 'required',
-            'Gender' => 'required'
+            'Gender' => 'required',
+            'foto' => 'image|file|max:2024'
         ];
+
+        // return $request->file('foto')->store('post-img');
+    
         $validatedRequest = $request->validate($rules);
+
+        if($request->file('foto')){
+            $validatedRequest['foto'] = $request->file('foto')->store('post-img');
+        }
 
         Pegawai::create($validatedRequest);
 
@@ -75,9 +85,17 @@ class PegawaiController extends Controller
             'Nama' => 'required',
             'No_HP' => 'required',
             'Alamat' => 'required',
-            'Gender' => 'required'
+            'Gender' => 'required',
+            'foto' => 'image|file|max:2024'
         ];
         $validatedRequest = $request->validate($rules);
+
+        if($request->file('foto')){
+            if($request->oldImage){
+                Storage::delete($request->oldImage);
+            }
+            $validatedRequest['foto'] = $request->file('foto')->store('post-img');
+        }
 
         Pegawai::where('id', $pegawai->id)->update($validatedRequest);
 
@@ -93,6 +111,9 @@ class PegawaiController extends Controller
      */
     public function destroy(Pegawai $pegawai)
     {
+        if($pegawai->foto){
+            Storage::delete($pegawai->foto);
+        }
         $pegawai->delete();
         return redirect (route('main'))->with('success_remove', 'Data has been removed succesfully!');
     }
